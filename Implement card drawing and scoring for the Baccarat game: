@@ -1,0 +1,43 @@
+import random
+
+bet_limit = 100
+
+while True:
+    # Get user's bet choice
+    base = get_valid_input("Place your bet (B for Banker, P for Player, Q to quit): ", ["b", "p", "q"])
+    if base == 'q':
+        break
+
+    # Get user's bet amount
+    bet_amount = get_valid_bet_amount()
+    if bet_amount > bet_limit:
+        raise ValueError("Bet amount exceeds the limit of $" + str(bet_limit) + ".")
+    total_money -= bet_amount
+
+    # Draw cards and calculate scores
+    deck = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] * 4
+    random.shuffle(deck)
+
+    player_hand = [deck.pop(), deck.pop()]
+    banker_hand = [deck.pop(), deck.pop()]
+
+    player_score = sum(int(card) if card.isnumeric() else 0 for card in player_hand)
+    banker_score = sum(int(card) if card.isnumeric() else 0 for card in banker_hand)
+
+    # Determine the winner
+    if player_score > banker_score:
+        print("Player wins!")
+        enter += 1
+        total_money += bet_amount*2
+        print("You won! Current bet: $", bet_amount)
+    elif player_score < banker_score:
+        print("Banker wins!")
+        ex += 1
+        print("You lost. Current bet: $", bet_amount)
+    else:
+        print("Tie!")
+        win = None
+    
+    calculate_statistics(rl, enter, ex)
+    if total_money < 0:
+        print("Sorry, you have run out of money")
