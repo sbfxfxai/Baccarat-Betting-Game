@@ -1,0 +1,84 @@
+player = 0
+rl = []
+ex = 0
+enter = 0
+total_money = 10
+
+    
+    
+def get_valid_input(prompt, valid_options):
+    """Get input from user and check that it is valid"""
+    while True:
+        try:
+            user_input = input(prompt).lower()
+            if user_input not in valid_options:
+                raise ValueError("Invalid choice. Please enter a valid option.")
+            break
+        except ValueError as e:
+            print(e)
+    return user_input
+
+def get_valid_bet_amount():
+    """Get a valid bet amount from the user"""
+    while True:
+        try:
+            bet_amount = float(input("Enter your bet amount: "))
+            if bet_amount < 0:
+                raise ValueError("Bet amount must be a positive number")
+            if total_money - bet_amount < 0:
+                raise ValueError("Bet amount exceeds total money.")
+            break
+        except ValueError as e:
+            print(e)
+    return bet_amount
+
+def calculate_statistics(rl, enter, ex):
+    """Calculate leave, max, and min values"""
+    leave = enter - ex
+    rl.append(leave)
+    Max = max(rl)
+    Min = min(rl)
+    ee = Max - leave
+    pp = Min - leave
+    print("Waiting for 3 to leave: ", ee)
+    print("Waiting for -3 to leave up: ", pp)
+    print("Max: ", Max)
+    print("RL: ", rl)
+    print("Leave: ", leave)
+    print("Total money: $", total_money)
+
+print("Welcome to the Baccarat betting game!")
+while True:
+    # Get user's bet choice
+    base = get_valid_input("Place your bet (B for Banker, P for Player, Q to quit): ", ["b", "p", "q"])
+    if base == 'q':
+        break
+    if base == 'p':
+        player += 1
+    else:
+        player -= 1
+    
+    # Print current bet choice
+    if player >= 1:
+        print("Betting on Player")
+    elif player < 0:
+        print("Betting on Banker")
+    else:
+        print("Betting on Banker")
+    
+    # Get user's win/lose choice
+    bet_amount = get_valid_bet_amount()
+    total_money -= bet_amount
+    wl = get_valid_input("Did you win or lose? (W for Win, L for Loss): ", ["w", "l"])
+    
+    # Update win/lose count and pot
+    if wl == 'w':
+        enter += 1
+        total_money += bet_amount*2
+        print("You won! Current bet: $", bet_amount)
+    else:
+        ex += 1
+        print("You lost. Current bet: $", bet_amount)
+    calculate_statistics(rl, enter, ex)
+    if total_money < 0:
+        print("Sorry, you have run out of money")
