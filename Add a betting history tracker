@@ -1,0 +1,4 @@
+bets = []
+
+# Add this block of code before the if statement that updates win/lose count and pot
+bets.append({"base": base, "bet_amount": bet_amount, "result": wl})
